@@ -9,6 +9,13 @@ import (
 // given day at the specified location.
 // Returns time.Time{} if there sun does not rise or set
 func SunriseSunset(latitude, longitude float64, year int, month time.Month, day int) (time.Time, time.Time) {
+	return SunriseSunsetAltitude(latitude, longitude, 0, year, month, day)
+}
+
+// SunriseSunsetAltitude calculates when the sun will rise and when it will set
+// on the given day at the specified location and altitude.
+// Returns time.Time{} if there sun does not rise or set
+func SunriseSunsetAltitude(latitude, longitude, altitude float64, year int, month time.Month, day int) (time.Time, time.Time) {
 	var (
 		d                 = MeanSolarNoon(longitude, year, month, day)
 		solarAnomaly      = SolarMeanAnomaly(d)
@@ -16,7 +23,7 @@ func SunriseSunset(latitude, longitude float64, year int, month time.Month, day 
 		eclipticLongitude = EclipticLongitude(solarAnomaly, equationOfCenter, d)
 		solarTransit      = SolarTransit(d, solarAnomaly, eclipticLongitude)
 		declination       = Declination(eclipticLongitude)
-		hourAngle         = HourAngle(latitude, declination)
+		hourAngle         = HourAngleAltitude(latitude, declination, altitude)
 		frac              = hourAngle / 360
 		sunrise           = solarTransit - frac
 		sunset            = solarTransit + frac
