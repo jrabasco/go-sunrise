@@ -1,3 +1,3 @@
-module github.com/nathan-osman/go-sunrise
+module github.com/jrabasco/go-sunrise
 
 go 1.22
